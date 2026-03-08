@@ -39,6 +39,8 @@ def create_app():
             db.session.execute(text("ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS email VARCHAR(120) UNIQUE"))
             db.session.execute(text("ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS full_name VARCHAR(120)"))
             db.session.execute(text("ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE"))
+            db.session.execute(text("ALTER TABLE projects ADD COLUMN IF NOT EXISTS images TEXT"))
+            db.session.execute(text("ALTER TABLE projects ADD COLUMN IF NOT EXISTS visible BOOLEAN NOT NULL DEFAULT TRUE"))
             db.session.commit()
         except Exception as e:
             db.session.rollback()
