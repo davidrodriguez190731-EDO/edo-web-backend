@@ -6,6 +6,7 @@ from routes.auth import auth_bp
 from routes.projects import projects_bp
 from routes.blog import blog_bp
 from routes.contact import contact_bp
+from routes.site_config import site_config_bp
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -13,7 +14,7 @@ load_dotenv()
 def create_app():
     app = Flask(__name__)
 
-    # ── Config ──────────────────────────────────────────────
+    # ── Config ──────────────────────────────────────────────────
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
         "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/edo_web"
     ).replace("postgres://", "postgresql://")
@@ -22,18 +23,19 @@ def create_app():
     app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY", "edo-secret-dev-2025")
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 86400  # 24h
 
-    # ── Extensions ──────────────────────────────────────────
+    # ── Extensions ──────────────────────────────────────────────
     db.init_app(app)
     JWTManager(app)
     CORS(app, resources={r"/api/*": {"origins": os.environ.get("FRONTEND_URL", "*")}})
 
-    # ── Blueprints ──────────────────────────────────────────
-    app.register_blueprint(auth_bp,     url_prefix="/api/auth")
-    app.register_blueprint(projects_bp, url_prefix="/api/projects")
-    app.register_blueprint(blog_bp,     url_prefix="/api/blog")
-    app.register_blueprint(contact_bp,  url_prefix="/api/contact")
+    # ── Blueprints ──────────────────────────────────────────────
+    app.register_blueprint(auth_bp,         url_prefix="/api/auth")
+    app.register_blueprint(projects_bp,     url_prefix="/api/projects")
+    app.register_blueprint(blog_bp,         url_prefix="/api/blog")
+    app.register_blueprint(contact_bp,      url_prefix="/api/contact")
+    app.register_blueprint(site_config_bp,  url_prefix="/api/site-config")
 
-    # ── Init DB + seed ──────────────────────────────────────
+    # ── Init DB + seed ──────────────────────────────────────────
     with app.app_context():
         db.create_all()
         seed_data()
@@ -123,5 +125,5 @@ def seed_data():
 
 if __name__ == "__main__":
     app = create_app()
-    # Puerto 5001 — no interfiere con EDO Gestión Mantenimiento (:5000)
+    # Puerto 5001 – no interfiere con EDO Gestión Mantenimiento (:5000)
     app.run(debug=True, host="0.0.0.0", port=5001)
