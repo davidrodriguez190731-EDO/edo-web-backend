@@ -75,7 +75,7 @@ VALID_KEYS = {
     'contact_address', 'contact_city', 'contact_schedule',
     # ── General / SEO ─────────────────────────────────────────────
     'site_name', 'site_tagline', 'site_description', 'site_keywords',
-    'social_instagram', 'social_linkedin', 'social_facebook',
+    'social_instagram', 'social_linkedin', 'social_facebook', 'social_tiktok',
 }
 
 @site_config_bp.route('/', methods=['GET'])
